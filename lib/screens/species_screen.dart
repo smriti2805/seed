@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 
+
+class SpeciesScreen extends StatelessWidget {
+  const SpeciesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SpeciesList(speciesData: demoSpeciesData,),
+    );
+  }
+}
+
 class SpeciesList extends StatelessWidget {
   final List<Map<String, String>> speciesData;
 
-  SpeciesList({required this.speciesData});
+  const SpeciesList({super.key, required this.speciesData});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class SpeciesList extends StatelessWidget {
                       species['family'] ?? '',
                       style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                     ),
-                    ButtonBar(
+                    OverflowBar(
                       alignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton(
