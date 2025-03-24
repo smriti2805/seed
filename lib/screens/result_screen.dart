@@ -79,8 +79,8 @@ class _ResultScreenState extends State<ResultScreen> {
                       return Column(
                         children: [
                           Text(
-                            // "Label: ${label.label}",
-                            "Label: Mango",
+                            "Label: ${label.label}",
+                            // "Label: Mango",
                             style: myTextStyle,
                           ),
                           Text(
