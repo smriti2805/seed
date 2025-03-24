@@ -94,11 +94,11 @@ class _ResultScreenState extends State<ResultScreen> {
                 ],
               ),
             ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Next',
-      //   child: const Icon(Icons.navigate_next),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Next',
+        child: const Icon(Icons.navigate_next),
+      ),
     );
   }
 
