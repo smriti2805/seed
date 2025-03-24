@@ -31,8 +31,8 @@ class SpeciesList extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                child: Image.network(
-                  species['imageUrl'] ?? '',
+                child: Image.asset(
+                  'assets/images/image.png',
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,

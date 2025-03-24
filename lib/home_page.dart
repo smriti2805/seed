@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('SeedSight')),
+      appBar: AppBar(title: Text('SeedSight'), backgroundColor: Colors.green,),
       drawer: AppDrawer(onItemTap: _selectTab),
       body: Stack(
         children: _navigatorKeys.entries.map((entry) {
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Species',
+            label: 'Seeds',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

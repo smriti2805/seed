@@ -75,3 +75,5 @@ app.*.map.json
 .env.local
 google-services.json
 firebase_options.dart
+
+.vscode
