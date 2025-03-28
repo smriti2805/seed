@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:seed/screens/species_screen.dart';
 import 'package:seed/widgets/app_drawer.dart';
 import 'package:seed/screens/identifier_screen.dart';
 import 'package:seed/screens/profile_screen.dart';
+import 'package:seed/theme_provider.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,40 +48,60 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('SeedSight')),
-      drawer: AppDrawer(onItemTap: _selectTab),
-      body: Stack(
-        children: _navigatorKeys.entries.map((entry) {
-          return Offstage(
-            offstage: _currentIndex != entry.key,
-            child: Navigator(
-              key: entry.value,
-              onGenerateRoute: (settings) => MaterialPageRoute(
-                builder: (context) => _screens[entry.key],
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Stack(
+      children: <Widget>[
+        // Image.asset(
+        //   "assets/images/seed.jpg",
+        //   height: MediaQuery.of(context).size.height,
+        //   width: MediaQuery.of(context).size.width,
+        //   fit: BoxFit.cover,
+        // ),
+        Scaffold(
+        appBar: AppBar(title: Text('SeedSight'),backgroundColor: Colors.green,
+            actions: [
+              IconButton(
+                icon: Icon(themeProvider.themeMode == ThemeMode.light
+                    ? Icons.dark_mode
+                    : Icons.light_mode),
+                onPressed: () {
+                  themeProvider.toggleTheme();
+                },
               ),
+            ],),
+        drawer: AppDrawer(onItemTap: _selectTab),
+        body: Stack(
+          children: _navigatorKeys.entries.map((entry) {
+            return Offstage(
+              offstage: _currentIndex != entry.key,
+              child: Navigator(
+                key: entry.value,
+                onGenerateRoute: (settings) => MaterialPageRoute(
+                  builder: (context) => _screens[entry.key],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: _selectTab,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt),
+              label: 'Identification',
             ),
-          );
-        }).toList(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _selectTab,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt),
-            label: 'Identification',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Species',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Species',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
+      ),],
     );
   }
 }

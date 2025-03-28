@@ -11,32 +11,53 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   Widget build(BuildContext context) {
-    
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Center(
       child: authProvider.isLoggedIn
           ? Center(
-            child: Column(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text('Profile Screen', style: TextStyle(fontSize: 24)),
+                      Text('Username: XYZ', style: TextStyle(fontSize: 24)),
+                      Text('Email: xyz@email.com', style: TextStyle(fontSize: 24)),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      authProvider.logout();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // Button color
+                      // padding: EdgeInsets.symmetric(
+                      //   horizontal: 30,
+                      //   vertical: 15,
+                      // ),
+                    ),
+                    child: Text('Log Out',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),),
+                  ),
+                ],
+              ),
+            )
+          : Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Profile Screen', style: TextStyle(fontSize: 24)),
-                ElevatedButton(
-                  onPressed: () {
-                    authProvider.logout();
-                  },
-                  child: Text('Log Out'),
+                Text('You are not logged in', style: TextStyle(fontSize: 24)),
+                SizedBox(
+                  height: 20,
                 ),
-                SizedBox(height: 20),
-              ],
-            ),
-          )
-          : Center(child: Column(
-            children: [
-              Text('You are not logged in', style: TextStyle(fontSize: 24)),
-              
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -47,9 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text('Sign In'),
                 ),
                 SizedBox(height: 20),
-            ],
-          )),
+              ],
+            )),
     );
   }
 }
-
