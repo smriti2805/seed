@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:seed/screens/result.dart';
-import 'package:seed/theme/theme_provider.dart';
+// import 'package:provider/provider.dart';
+import 'package:seed/screens/result_screen.dart';
+// import 'package:seed/theme/theme_provider.dart';
 
 class IdentificationScreen extends StatelessWidget {
   final ImagePicker _picker = ImagePicker();
@@ -83,7 +83,7 @@ class IdentificationScreen extends StatelessWidget {
     );
   }
 
-  var myButtonStyle = ElevatedButton.styleFrom(
+  final myButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: Colors.green,
     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
     textStyle: TextStyle(fontSize: 18),
@@ -91,7 +91,7 @@ class IdentificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Stack(
         children: <Widget>[
