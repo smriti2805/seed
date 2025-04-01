@@ -4,7 +4,7 @@ import 'package:seed/screens/species_screen.dart';
 import 'package:seed/widgets/app_drawer.dart';
 import 'package:seed/screens/identifier_screen.dart';
 import 'package:seed/screens/profile_screen.dart';
-import 'package:seed/theme_provider.dart';
+import 'package:seed/theme/theme_provider.dart';
 
 
 class HomePage extends StatefulWidget {

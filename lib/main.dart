@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seed/providers/auth_provider.dart';
-import 'package:seed/theme_provider.dart';
+import 'package:seed/theme/theme_provider.dart';
 import 'package:seed/home_page.dart';
-import 'package:seed/theme.dart';
+import 'package:seed/theme/theme.dart';
 
 void main() {
   // firebase.ini
@@ -19,6 +19,8 @@ void main() {
 }
 
 class SeedSightApp extends StatelessWidget {
+  const SeedSightApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
