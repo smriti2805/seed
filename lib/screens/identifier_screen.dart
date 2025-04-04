@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:seed/screens/result.dart';
+import 'package:seed/screens/result_screen.dart';
 import 'package:seed/theme/theme_provider.dart';
 
 class IdentificationScreen extends StatelessWidget {

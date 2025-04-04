@@ -14,9 +14,9 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,39 +43,39 @@ class _SignInScreenState extends State<SignInScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.account_circle, size: 100, color: Colors.blue),
+              // SizedBox(height: 20),
+              // TextField(
+              //   controller: nameController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Name',
+              //     border: OutlineInputBorder(),
+              //   ),
+              // ),
               SizedBox(height: 20),
               TextField(
-                controller: usernameController,
+                controller: phoneController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 20),
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
+              // TextField(
+              //   controller: passwordController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Password',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   obscureText: true,
+              // ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Provider.of<AuthProvider>(context, listen: false).login();
                   Navigator.pop(context);
                 },
-                child: Text('Sign In'),
+                child: Text('Get OTP'),
               ),
             ],
           ),
