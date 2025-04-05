@@ -1,30 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:seed/providers/auth_provider.dart';
+import 'package:seed/home_page.dart';
+import 'package:seed/screens/signup_screen.dart';
+import 'package:seed/style/button_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
-  // final Function(String, String, String) onSignIn;
-
-  // const LoginScreen({super.key, required this.onSignIn});
-
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  SignInScreenState createState() => SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController usernameController = TextEditingController();
+class SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text('Sign In'),
+        backgroundColor: Colors.green,
         elevation: 0.0,
-        titleSpacing: 10.0,
         centerTitle: true,
         leading: InkWell(
           onTap: () {
@@ -32,55 +31,130 @@ class _SignInScreenState extends State<SignInScreen> {
           },
           child: Icon(
             Icons.arrow_back_ios,
-            color: Colors.black54,
+            color: Colors.white,
           ),
         ),
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.account_circle, size: 100, color: Colors.blue),
-              SizedBox(height: 20),
-              TextField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.lock_open_rounded, size: 150, color: Colors.green),
+                SizedBox(height: 20),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
                 ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 50),
+                isLoading
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () async {
+                          setState(() => isLoading = true);
+
+                          if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                            showMessage('Please fill in all fields');
+                            setState(() => isLoading = false);
+                            return;
+                          }
+
+                          final result = await login(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          );
+
+                          setState(() => isLoading = false);
+
+                          if (result['success']) {
+                            // Save login status
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool('isLoggedIn', true);
+                            await prefs.setString('userEmail', emailController.text.trim());
+                            if (mounted) {
+                              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(initialIndex: 0),
+                                ),
+                                (route) => false,
+                              );
+                            }
+                          } else {
+                            showMessage(result['message']);
+                          }
+                        },
+                        style: elevatedButtonStyle,
+                        child: Text('Sign In', style: elevatedButtonTextStyle),
+                      ),
+                SizedBox(height: 50),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => SignUpScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Create an account',
+                    style: TextStyle(fontSize: 20, color: Colors.green),
+                  ),
                 ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<AuthProvider>(context, listen: false).login();
-                  Navigator.pop(context);
-                },
-                child: Text('Sign In'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      return {
+        'success': true,
+        'credential': credential,
+      };
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided.';
+      } else {
+        errorMessage = 'Login failed: ${e.message}';
+      }
+      return {
+        'success': false,
+        'message': errorMessage,
+      };
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'An unexpected error occurred: $e',
+      };
+    }
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
     );
   }
 }

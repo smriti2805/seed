@@ -6,16 +6,16 @@ import 'package:seed/screens/identifier_screen.dart';
 import 'package:seed/screens/profile_screen.dart';
 import 'package:seed/theme/theme_provider.dart';
 
-
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int initialIndex;
+  const HomePage({super.key, this.initialIndex = 0});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   final Map<int, GlobalKey<NavigatorState>> _navigatorKeys = {
     0: GlobalKey<NavigatorState>(),
@@ -30,78 +30,67 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void _selectTab(int index) {
-    // if (index == 2) {
-    //   // Handle Profile Login Restriction
-    //   final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    //   if (!authProvider.isLoggedIn) {
-    //     // Show login screen if user taps Profile and isn't logged in
-    //     Navigator.of(context).push(
-    //       MaterialPageRoute(builder: (context) => SignInScreen()),
-    //     );
-    //     return;
-    //   }
-    // }
     setState(() {
       _currentIndex = index;
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return Stack(
-      children: <Widget>[
-        // Image.asset(
-        //   "assets/images/seed.jpg",
-        //   height: MediaQuery.of(context).size.height,
-        //   width: MediaQuery.of(context).size.width,
-        //   fit: BoxFit.cover,
-        // ),
-        Scaffold(
-        appBar: AppBar(title: Text('SeedSight'),backgroundColor: Colors.green,
-            actions: [
-              IconButton(
-                icon: Icon(themeProvider.themeMode == ThemeMode.light
-                    ? Icons.dark_mode
-                    : Icons.light_mode),
-                onPressed: () {
-                  themeProvider.toggleTheme();
-                },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SeedSight'),
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            icon: Icon(themeProvider.themeMode == ThemeMode.light
+                ? Icons.dark_mode
+                : Icons.light_mode),
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
+          ),
+        ],
+      ),
+      drawer: AppDrawer(onItemTap: _selectTab),
+      body: Stack(
+        children: _navigatorKeys.entries.map((entry) {
+          return Offstage(
+            offstage: _currentIndex != entry.key,
+            child: Navigator(
+              key: entry.value,
+              onGenerateRoute: (settings) => MaterialPageRoute(
+                builder: (context) => _screens[entry.key],
               ),
-            ],),
-        drawer: AppDrawer(onItemTap: _selectTab),
-        body: Stack(
-          children: _navigatorKeys.entries.map((entry) {
-            return Offstage(
-              offstage: _currentIndex != entry.key,
-              child: Navigator(
-                key: entry.value,
-                onGenerateRoute: (settings) => MaterialPageRoute(
-                  builder: (context) => _screens[entry.key],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: _selectTab,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt),
-              label: 'Identification',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Species',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-        ),
-      ),],
+          );
+        }).toList(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _selectTab,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera_alt),
+            label: 'Identification',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Species',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

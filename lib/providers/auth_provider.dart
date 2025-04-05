@@ -1,17 +1,36 @@
+// import 'package:flutter/material.dart';
+
+// class AuthProvider with ChangeNotifier {
+//   bool _isLoggedIn = false;
+
+//   bool get isLoggedIn => _isLoggedIn;
+
+//   void login() {
+//     _isLoggedIn = true;
+//     notifyListeners(); // Notify UI to rebuild
+//   }
+
+//   void logout() {
+//     _isLoggedIn = false;
+//     notifyListeners();
+//   }
+// }
+
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthProvider with ChangeNotifier {
-  bool _isLoggedIn = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool get isLoggedIn => _isLoggedIn;
+  User? get user => _auth.currentUser;
 
-  void login() {
-    _isLoggedIn = true;
-    notifyListeners(); // Notify UI to rebuild
-  }
+  bool get isLoggedIn => user != null;
 
-  void logout() {
-    _isLoggedIn = false;
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  void logout() async {
+    await _auth.signOut();
     notifyListeners();
   }
 }

@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:seed/screens/result.dart';
-import 'package:seed/theme/theme_provider.dart';
+import 'package:path/path.dart';
+import 'package:seed/screens/result_screen.dart';
+import 'package:seed/services/storage_service.dart';
+import 'package:seed/style/button_style.dart';
 
 class IdentificationScreen extends StatelessWidget {
   final ImagePicker _picker = ImagePicker();
@@ -22,8 +23,7 @@ class IdentificationScreen extends StatelessWidget {
         return SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(16),
-            margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+            margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,40 +40,54 @@ class IdentificationScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    XFile? image =
-                    await _picker.pickImage(source: ImageSource.camera);
+                    XFile? image = await _picker.pickImage(source: ImageSource.camera);
                     if (image != null) {
+                      final StorageService storageService = StorageService();
+                      print("starting upload.............................................................................................................");
+                      await storageService.uploadFile(
+                        image.path,
+                        basename(image.path),
+                      );
+                      if (!context.mounted) return;
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => Result(image: File(image.path)),
                         ),
                       );
                     } else {
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                     }
                   },
                   icon: Icon(Icons.camera_alt, color: Colors.white),
-                  label: Text('Open Camera'),
-                  style: myButtonStyle,
+                  label: Text('Open Camera',style: elevatedButtonTextStyle,),
+                  style: elevatedButtonStyle,
                 ),
                 SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    XFile? image =
-                    await _picker.pickImage(source: ImageSource.gallery);
+                    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
                     if (image != null) {
+                      final StorageService storageService = StorageService();
+                      print("starting upload.............................................................................................................");
+                      await storageService.uploadFile(
+                        image.path,
+                        basename(image.path),
+                      );
+                      if (!context.mounted) return;
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => Result(image: File(image.path)),
                         ),
                       );
                     } else {
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                     }
                   },
                   icon: Icon(Icons.photo_library, color: Colors.white),
-                  label: Text('Choose from Gallery'),
-                  style: myButtonStyle,
+                  label: Text('Choose from Gallery', style: elevatedButtonTextStyle,),
+                  style: elevatedButtonStyle,
                 ),
               ],
             ),
@@ -83,57 +97,48 @@ class IdentificationScreen extends StatelessWidget {
     );
   }
 
-  var myButtonStyle = ElevatedButton.styleFrom(
-    backgroundColor: Colors.green,
-    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-    textStyle: TextStyle(fontSize: 18),
-  );
-
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Stack(
-        children: <Widget>[
-          // Image.asset(
-          //   "assets/images/seed_background.jpeg",
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          //   fit: BoxFit.cover,
-          // ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () => _showImagePickerOptions(context),
-
-                  child: Column(
-                    children: [
-                      Icon(Icons.camera_alt, size: 80, color: Colors.green),
-                      SizedBox(height: 10),
-                      Text(
-                        'Touch to identify',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      children: <Widget>[
+        // Image.asset(
+        //   "assets/images/seed_background.jpeg",
+        //   height: MediaQuery.of(context).size.height,
+        //   width: MediaQuery.of(context).size.width,
+        //   fit: BoxFit.cover,
+        // ),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () => _showImagePickerOptions(context),
+                child: Column(
+                  children: [
+                    Icon(Icons.camera_alt, size: 150, color: Colors.green),
+                    SizedBox(height: 10),
+                    Text(
+                      'Touch to identify',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => _showImagePickerOptions(context),
+                      style: elevatedButtonStyle,
+                      child: Text(
+                        'Select Image',
+                        style: elevatedButtonTextStyle.copyWith(color: Colors.black),
                       ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => _showImagePickerOptions(context),
-                        style: myButtonStyle,
-                        child: Text(
-                          'Select Image',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
+      ],
     );
   }
 }
-
-

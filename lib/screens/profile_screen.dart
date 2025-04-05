@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seed/providers/auth_provider.dart';
 import 'package:seed/screens/signin_screen.dart';
+import 'package:seed/style/button_style.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -21,31 +22,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Center(widthFactor: 1.5, child: Icon(Icons.person_outline_rounded, size: 200, color: Colors.green)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text('Profile Screen', style: TextStyle(fontSize: 24)),
-                      Text('Username: XYZ', style: TextStyle(fontSize: 24)),
-                      Text('Email: xyz@email.com', style: TextStyle(fontSize: 24)),
+                      Text('Name: ${authProvider.user?.displayName}', style: TextStyle(fontSize: 30)),
+                      SizedBox(height: 20),
+                      Text('Email: ${authProvider.user?.email}', style: TextStyle(fontSize: 30)),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () {
                       authProvider.logout();
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // Button color
-                      // padding: EdgeInsets.symmetric(
-                      //   horizontal: 30,
-                      //   vertical: 15,
-                      // ),
+                    style: elevatedButtonStyle,
+                    child: Text(
+                      'Log Out',
+                      style: elevatedButtonTextStyle
                     ),
-                    child: Text('Log Out',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),),
                   ),
                 ],
               ),
@@ -54,18 +49,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('You are not logged in', style: TextStyle(fontSize: 24)),
+                Text('You are not logged in', style: TextStyle(fontSize: 35)),
                 SizedBox(
                   height: 20,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context, rootNavigator: true).push(
+                      // Use rootNavigator: true
                       MaterialPageRoute(builder: (context) => SignInScreen()),
                     );
                   },
-                  child: Text('Sign In'),
+                  style: elevatedButtonStyle,
+                  child: Text('Sign In', style: elevatedButtonTextStyle),
                 ),
                 SizedBox(height: 20),
               ],
