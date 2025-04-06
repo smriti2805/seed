@@ -38,7 +38,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.85,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

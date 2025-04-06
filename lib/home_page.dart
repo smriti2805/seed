@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:seed/screens/species_screen.dart';
+import 'package:seed/screens/seeds_screen.dart';
+import 'package:seed/services/storage_service.dart';
 import 'package:seed/widgets/app_drawer.dart';
 import 'package:seed/screens/identifier_screen.dart';
 import 'package:seed/screens/profile_screen.dart';
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _screens = [
     IdentificationScreen(),
-    SpeciesScreen(),
+    SeedScreen(),
     ProfileScreen(),
   ];
 
@@ -49,10 +50,17 @@ class _HomePageState extends State<HomePage> {
         title: Text('SeedSight'),
         backgroundColor: Colors.green,
         actions: [
+          // if (_currentIndex == 1 ) {
           IconButton(
-            icon: Icon(themeProvider.themeMode == ThemeMode.light
-                ? Icons.dark_mode
-                : Icons.light_mode),
+            icon: Icon(Icons.refresh),
+            onPressed: () async {
+              await clearSeedDataCache();
+              // await getSeedData();
+              setState(() {}); 
+            },
+          ),
+          IconButton(
+            icon: Icon(themeProvider.themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
               themeProvider.toggleTheme();
             },
@@ -83,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Species',
+            label: 'Seeds',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
