@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.refresh),
             onPressed: () async {
               await clearSeedDataCache();
-              await getSeedData();
+              // await getSeedData();
               setState(() {}); 
             },
           ),
