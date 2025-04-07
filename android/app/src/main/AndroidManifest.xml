@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="seed"
+        android:label="Seed Sight"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
