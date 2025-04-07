@@ -75,12 +75,10 @@ class SignInScreenState extends State<SignInScreen> {
                             return;
                           }
 
-                          final result = await login(
+                          final result = await signin(
                             emailController.text.trim(),
                             passwordController.text.trim(),
                           );
-
-                          setState(() => isLoading = false);
 
                           if (result['success']) {
                             // Save login status
@@ -98,6 +96,9 @@ class SignInScreenState extends State<SignInScreen> {
                           } else {
                             showMessage(result['message']);
                           }
+
+                          setState(() => isLoading = false);
+                          
                         },
                         style: elevatedButtonStyle,
                         child: Text('Sign In', style: elevatedButtonTextStyle),
@@ -124,7 +125,7 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> signin(String email, String password) async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       return {

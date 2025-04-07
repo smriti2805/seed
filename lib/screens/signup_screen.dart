@@ -96,8 +96,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                             passwordController.text.trim(),
                           );
 
-                          setState(() => isLoading = false);
-
                           if (result['success']) {
                             final UserCredential credential = result['credential'];
                             final user = credential.user;
@@ -122,6 +120,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                           } else {
                             showMessage(result['message']);
                           }
+
+                          setState(() => isLoading = false);
+
                         },
                         style: elevatedButtonStyle,
                         child: Text('Sign Up', style: elevatedButtonTextStyle),
