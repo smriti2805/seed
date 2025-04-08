@@ -16,7 +16,13 @@ class _SeedScreenState extends State<SeedScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getCachedSeedData(),
+      future: getCachedSeedData().then((cachedData) async {
+    if (cachedData == null) {
+      final freshData = await getSeedData(context);
+      return freshData;
+    }
+    return cachedData;
+  }),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -44,7 +50,8 @@ class SeedList extends StatelessWidget {
   Widget build(BuildContext context) {
   final isLoading = Provider.of<SeedDataProvider>(context).isLoading;
     return isLoading
-      ? Center(child: Column(
+      ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(),
           SizedBox(height: 20),
@@ -52,7 +59,7 @@ class SeedList extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ],
-      ))
+      )
       :  ListView.builder(
       itemCount: seedData.length,
       itemBuilder: (context, index) {

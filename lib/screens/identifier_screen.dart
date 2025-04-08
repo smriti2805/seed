@@ -44,7 +44,7 @@ class IdentificationScreen extends StatelessWidget {
                     if (image != null) {
                       final StorageService storageService = StorageService();
                       print("starting upload.............................................................................................................");
-                      await storageService.uploadFile(
+                      storageService.uploadFile(
                         image.path,
                         basename(image.path),
                       );
@@ -70,7 +70,7 @@ class IdentificationScreen extends StatelessWidget {
                     if (image != null) {
                       final StorageService storageService = StorageService();
                       print("starting upload.............................................................................................................");
-                      await storageService.uploadFile(
+                      storageService.uploadFile(
                         image.path,
                         basename(image.path),
                       );

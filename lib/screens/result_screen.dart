@@ -24,11 +24,12 @@ class Result extends StatelessWidget {
           }
 
           var response = snapshot.data!;
+          var imgWidth = MediaQuery.of(context).size.width * 0.8;
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.file(image, width: 200, height: 200, fit: BoxFit.cover),
+                Image.file(image, width: imgWidth, height: imgWidth, fit: BoxFit.cover),
                 SizedBox(height: 20),
                 Text(
                   "Result: ${response['class']}",
