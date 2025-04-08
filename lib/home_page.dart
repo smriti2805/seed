@@ -40,6 +40,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+    getSeedData(context).then((_) {
+      setState(() {});
+    });
   }
 
   @override
@@ -50,15 +53,16 @@ class _HomePageState extends State<HomePage> {
         title: Text('SeedSight'),
         backgroundColor: Colors.green,
         actions: [
-          // if (_currentIndex == 1 ) {
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () async {
-              await clearSeedDataCache();
-              // await getSeedData();
-              setState(() {}); 
-            },
-          ),
+          // _currentIndex == 1 ?{
+          // IconButton(
+          //   icon: Icon(Icons.refresh),
+          //   onPressed: () async {
+          //     await clearSeedDataCache();
+          //     // await getSeedData();
+          //     setState(() {});
+          //   },
+          // ),
+          // : null,
           IconButton(
             icon: Icon(themeProvider.themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
@@ -68,6 +72,16 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: AppDrawer(onItemTap: _selectTab),
+      floatingActionButton: _currentIndex == 1
+          ? FloatingActionButton(
+              onPressed: () {
+                clearSeedDataCache(context);
+                setState(() {});
+              },
+              backgroundColor: Colors.green,
+              child: Icon(Icons.refresh),
+            )
+          : null,
       body: Stack(
         children: _navigatorKeys.entries.map((entry) {
           return Offstage(

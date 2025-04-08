@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:seed/providers/seed_data_provider.dart';
 import 'package:seed/services/storage_service.dart';
 
 class SeedScreen extends StatefulWidget {
@@ -40,7 +42,10 @@ class SeedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+  final isLoading = Provider.of<SeedDataProvider>(context).isLoading;
+    return isLoading
+      ? Center(child: CircularProgressIndicator())
+      :  ListView.builder(
       itemCount: seedData.length,
       itemBuilder: (context, index) {
         final seed = seedData[index];
@@ -79,14 +84,14 @@ class SeedList extends StatelessWidget {
                       seed['scientificName'] ?? '',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
                     ),
-                    Text(
-                      seed['commonName'] ?? '',
-                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                    ),
-                    Text(
-                      seed['family'] ?? '',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                    ),
+                    // Text(
+                    //   seed['commonName'] ?? '',
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                    // ),
+                    // Text(
+                    //   seed['family'] ?? '',
+                    //   style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                    // ),
                     // OverflowBar(
                     //   alignment: MainAxisAlignment.spaceBetween,
                     //   children: [

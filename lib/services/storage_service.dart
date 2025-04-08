@@ -54,8 +54,11 @@
 
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:seed/providers/seed_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For encoding and decoding JSON
 
@@ -94,12 +97,17 @@ class StorageService {
   }
 }
 
-Future<List<Map<String, dynamic>>> getSeedData() async {
+Future<List<Map<String, dynamic>>> getSeedData(BuildContext context) async {
   final storageService = StorageService();
   final prefs = await SharedPreferences.getInstance();
+
+  final seedDataProvider = Provider.of<SeedDataProvider>(context, listen: false);
+  seedDataProvider.setLoading(true);
+
   final cachedData = prefs.getString('seedData');
 
   if (cachedData != null) {
+    seedDataProvider.setLoading(false);
     // Data exists in cache, decode and return it.
     List<dynamic> decodedData = json.decode(cachedData);
     return decodedData.cast<Map<String, dynamic>>();
@@ -126,6 +134,7 @@ Future<List<Map<String, dynamic>>> getSeedData() async {
     }
     // Cache the data.
     prefs.setString('seedData', json.encode(data));
+    seedDataProvider.setLoading(false);
     return data;
   }
 }
@@ -164,8 +173,8 @@ Future<List<Map<String, dynamic>>?> getCachedSeedData() async {
   }
 }
 
-Future<void> clearSeedDataCache() async {
+Future<void> clearSeedDataCache(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('seedData');
-  await getSeedData();
+  await getSeedData(context);
 }

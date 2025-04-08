@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seed/firebase_options.dart';
 import 'package:seed/providers/auth_provider.dart';
+import 'package:seed/providers/seed_data_provider.dart';
 import 'package:seed/theme/theme_provider.dart';
 import 'package:seed/home_page.dart';
 import 'package:seed/theme/theme.dart';
@@ -16,6 +17,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => SeedDataProvider()),
       ],
       child: SeedSightApp(),
     ),
