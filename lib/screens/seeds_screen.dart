@@ -44,7 +44,15 @@ class SeedList extends StatelessWidget {
   Widget build(BuildContext context) {
   final isLoading = Provider.of<SeedDataProvider>(context).isLoading;
     return isLoading
-      ? Center(child: CircularProgressIndicator())
+      ? Center(child: Column(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 20),
+          Text('Loading...',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ))
       :  ListView.builder(
       itemCount: seedData.length,
       itemBuilder: (context, index) {
